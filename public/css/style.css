@@ -1,0 +1,194 @@
+/* ============== Global ============== */
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f5f7fa;
+    color: #222;
+     
+}
+
+/* ============== Navbar (Header kept as before) ============== */
+.navbar {
+    height: 4.5rem;
+    background: #ffffff;
+    border-bottom: 1px solid #e7e9ec;
+}
+
+.nav-link {
+    color: black !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #fe424d !important;
+}
+
+.price-tag {
+    color: #fe424d;
+    font-weight: 600;
+}
+
+/* ============== Listing Cards (unchanged) ============== */
+
+.card{
+    padding:0rem;
+}
+
+.listing-card {
+    border: 1px solid #e7e9ec;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.listing-card .ratio {
+    overflow: hidden; /* contain zoom */
+}
+
+.listing-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    will-change: transform;
+}
+.card-img-top-show {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    will-change: transform;
+}
+
+.listing-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Skeleton shimmer (optional placeholder) */
+.skeleton {
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    background-size: 200% 100%;
+    animation: shine 1.2s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position-x: -200%; }
+}
+
+/* Show page main image */
+.show-img {
+    max-height: 420px;
+    object-fit: cover;
+    width: 100%;
+    border-top-left-radius: 0.3rem; /* Match card border radius */
+    border-top-right-radius: 0.3rem; 
+}
+
+/* ============== Forms ============== */
+.form-shell {
+    background: #ffffff;
+    border: 1px solid #e4e6ea;
+    border-radius: 1rem;
+}
+
+.form-control:focus {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 .2rem rgba(254,66,77,.15);
+}
+
+/* Buttons */
+.btn-primary {
+
+    background: #e63842;
+    border-color: #e63842;
+}
+
+.btn-primary:hover {
+    background: #e63842;
+    border-color: #e63842;
+}
+
+.navbar-brand{
+    color:#e63842;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+
+.footer {
+    background: #cdcdd0; /* whitesmoke-like */
+   
+}
+
+.container{
+    flex: 1;
+}
+
+.f-info-socials a {
+    color: #111; 
+    font-size: 1.15rem;
+    margin: 0 .65rem;
+    display: inline-flex;
+    transition: color .25s ease;
+    text-decoration: none;
+}
+
+.f-info-socials a:hover {
+    color: #fe424d;
+}
+
+.f-info-brand {
+    font-weight: 500;
+    color: #111;
+    font-size: 0.95rem;
+}
+
+.f-info-links {
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.f-info-links a {
+    color: #111;
+    text-decoration: none;
+    transition: color .25s ease;
+}
+
+.f-info-links a:hover {
+    color: #fe424d;
+    text-decoration: underline;
+}
+
+.f-info-links .separator {
+    color: #999;
+    font-size: .8rem;
+    line-height: 1;
+    user-select: none;
+}
+
+/* Badges */
+.badge.bg-primary-subtle {
+    background: #eef4ff !important;
+    color: #1d4a89;
+}
+
+.badge.bg-secondary-subtle {
+    background: #f1f2f4 !important;
+    color: #555;
+}
+
+/* ============== Responsive ============== */
+@media (max-width: 768px) {
+    .listing-card .card-img-top {
+        height: 170px;
+    }
+    .show-img {
+        max-height: 300px;
+    }
+    .form-shell {
+        padding: .5rem;
+    }
+}
