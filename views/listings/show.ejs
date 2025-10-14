@@ -1,5 +1,163 @@
 <% layout("/layouts/boilerplate") -%>
 
+<style>
+    /* Mobile-first responsive styles */
+    .show-card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .show-img {
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    /* Tablet (768px - 991px) */
+    @media (max-width: 991px) {
+        .row.mt-3 > div {
+            width: 90%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .show-img {
+            max-height: 350px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+    }
+
+    /* Mobile (max-width: 767px) */
+    @media (max-width: 767px) {
+        .row.mt-3 {
+            margin-top: 1rem !important;
+        }
+
+        .row.mt-3 > div {
+            width: 100%;
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .col-8.offset-2 {
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            padding: 0 10px;
+        }
+
+        .show-img {
+            max-height: 250px;
+            border-radius: 8px;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+        }
+
+        .list-group-item {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-check.form-switch {
+            margin-top: 0.5rem;
+        }
+
+        .tax-info {
+            font-size: 0.8rem !important;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+        }
+
+        .starability-slot {
+            transform: scale(0.9);
+            transform-origin: left;
+        }
+
+        textarea {
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-dark, .btn-danger {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .d-inline {
+            display: block !important;
+        }
+
+        #map {
+            height: 250px !important;
+            border-radius: 8px;
+        }
+    }
+
+    /* Small Mobile (max-width: 480px) */
+    @media (max-width: 480px) {
+        h3 {
+            font-size: 1.2rem;
+        }
+
+        .show-img {
+            max-height: 200px;
+        }
+
+        .card-body {
+            padding: 0.75rem;
+        }
+
+        .card-text {
+            font-size: 0.85rem;
+        }
+
+        .list-group-item {
+            padding: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        h4 {
+            font-size: 1rem;
+        }
+
+        .starability-slot {
+            transform: scale(0.8);
+        }
+
+        #map {
+            height: 200px !important;
+        }
+    }
+</style>
+
 <div class="row mt-3">
     <div class="col-8 offset-2">
         <h3><%= listing.title %></h3>

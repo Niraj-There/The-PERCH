@@ -1,5 +1,48 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+    /* Mobile responsive styles for forms */
+    @media (max-width: 767px) {
+        .row > .col-8.offset-2 {
+            width: 100% !important;
+            margin-left: 0 !important;
+            padding: 0 15px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select, textarea {
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            width: 100%;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 1.3rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+        }
+
+        .form-control, .form-select, textarea {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
 <div class="row">
     <div class="col-8 offset-2">
         <h2>Create New Listing</h2>

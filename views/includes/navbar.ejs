@@ -2,7 +2,9 @@
   .navbar-search-container {
     flex: 1;
     max-width: 500px;
-    margin: 0 2rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
 
   .navbar-search {
@@ -14,6 +16,7 @@
     padding: 0.4rem 1rem;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     transition: box-shadow 0.3s ease;
+    width: 100%;
   }
 
   .navbar-search:hover,
@@ -27,6 +30,7 @@
     padding: 0 0.75rem;
     border-right: 1px solid #e0e0e0;
     flex: 1;
+    min-width: 0;
   }
 
   .navbar-search-group:last-of-type {
@@ -40,6 +44,7 @@
     font-size: 0.85rem;
     padding: 0;
     background: transparent;
+    min-width: 0;
   }
 
   .navbar-search-group input::placeholder {
@@ -53,12 +58,14 @@
     border-radius: 50%;
     width: 32px;
     height: 32px;
+    min-width: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
     margin-left: 0.5rem;
+    flex-shrink: 0;
   }
 
   .navbar-search-btn:hover {
@@ -71,24 +78,89 @@
     font-size: 0.9rem;
   }
 
-  @media (max-width: 768px) {
+  /* Tablet (768px - 991px) */
+  @media (max-width: 991px) {
     .navbar-search-container {
-      width: 100%;
-      max-width: 100%;
-      margin: 1rem 0;
-      order: 3;
-    }
-
-    .navbar-search {
-      border-radius: 25px;
-    }
-
-    .navbar-search-group {
-      padding: 0 0.5rem;
+      max-width: 400px;
+      margin: 0 1rem;
     }
 
     .navbar-search-group input {
       font-size: 0.8rem;
+    }
+
+    .navbar-search-group input::placeholder {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Mobile (max-width: 767px) */
+  @media (max-width: 767px) {
+    .navbar-search-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0.5rem 0;
+      order: 3;
+      padding: 0;
+    }
+
+    .navbar-search {
+      border-radius: 20px;
+      padding: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .navbar-search-group {
+      padding: 0.6rem 0.5rem;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+      width: 100%;
+      min-height: 40px;
+    }
+
+    .navbar-search-group:last-of-type {
+      border-bottom: none;
+    }
+
+    .navbar-search-group input {
+      font-size: 0.85rem;
+    }
+
+    .navbar-search-btn {
+      width: 100%;
+      border-radius: 20px;
+      height: 40px;
+      margin: 0.5rem 0 0 0;
+    }
+
+    .navbar-nav {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .navbar-nav .nav-link {
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .navbar-brand {
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Small Mobile (max-width: 480px) */
+  @media (max-width: 480px) {
+    .navbar-brand {
+      font-size: 1.2rem;
+    }
+
+    .navbar-search-group input {
+      font-size: 0.8rem;
+    }
+
+    .navbar-search-group input::placeholder {
+      font-size: 0.75rem;
     }
   }
 </style>

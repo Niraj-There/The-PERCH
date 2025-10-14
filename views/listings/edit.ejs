@@ -1,5 +1,53 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+    /* Mobile responsive styles for edit form */
+    @media (max-width: 767px) {
+        .row.mt-3 > .col-8.offset-2 {
+            width: 100% !important;
+            margin-left: 0 !important;
+            padding: 0 15px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select, textarea {
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            width: 100%;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-image {
+            max-height: 200px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h3 {
+            font-size: 1.2rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+        }
+
+        .current-image {
+            max-height: 150px;
+        }
+    }
+</style>
+
 <div class="row mt-3">
     <div class="col-8 offset-2">
         <h3>Edit Your Listing</h3>
