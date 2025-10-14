@@ -19,35 +19,33 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Starability CSS - Slot Machine Rating -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/starability@2.4.2/starability-css/starability-slot.min.css">
+    
+    <!-- Custom Rating CSS -->
+    <link rel="stylesheet" href="/css/rating.css">
+    
+    <!-- Mapbox GL JS CSS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
+    
+    <!-- Mapbox GL JS Script -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
+    
+    <style>
+        .map-container {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
     <%- include('../includes/navbar') %>
 
     <div class="container mt-3">
-        <%- include("../includes/flash.ejs") %> <%- body %>
+        <%- body %>
         <br><br><br>
     </div>
-
-    <!-- Bootstrap Validation Script -->
-    <script>
-        (() => {
-            'use strict';
-
-            // Fetch all forms that need validation
-            const forms = document.querySelectorAll('.needs-validation');
-
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-    </script>
 
     <%- include('../includes/footer') %>
 
@@ -69,6 +67,37 @@
                 }, false)
             })
         })()
+    </script>
+
+    <!-- Global Search Script for Navbar -->
+    <script>
+        // Only run on listings page
+        if (window.location.pathname === '/listings') {
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchButton = document.getElementById('navbar-search-button');
+                const searchLocation = document.getElementById('navbar-search-location');
+                const searchCountry = document.getElementById('navbar-search-country');
+                const searchPrice = document.getElementById('navbar-search-price');
+
+                if (searchButton && searchLocation && searchCountry && searchPrice) {
+                    // Store search values in sessionStorage for persistence
+                    const savedLocation = sessionStorage.getItem('searchLocation');
+                    const savedCountry = sessionStorage.getItem('searchCountry');
+                    const savedPrice = sessionStorage.getItem('searchPrice');
+
+                    if (savedLocation) searchLocation.value = savedLocation;
+                    if (savedCountry) searchCountry.value = savedCountry;
+                    if (savedPrice) searchPrice.value = savedPrice;
+
+                    // Save search values
+                    searchButton.addEventListener('click', function() {
+                        sessionStorage.setItem('searchLocation', searchLocation.value);
+                        sessionStorage.setItem('searchCountry', searchCountry.value);
+                        sessionStorage.setItem('searchPrice', searchPrice.value);
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>

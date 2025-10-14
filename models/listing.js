@@ -35,13 +35,25 @@ const listingSchema = new Schema({
         required: [true, 'Country is required'],
         trim: true
     },
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point']
+        },
+        coordinates: {
+            type: [Number]
+        }
+    },
     reviews: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Review'
         }
     ],
-     
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 }, {
     timestamps: true
 });

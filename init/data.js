@@ -1,4 +1,4 @@
-const data = [
+const sampleListings = [
   {
     title: "Cozy Beachfront Cottage",
     description:
@@ -349,4 +349,4 @@ const data = [
   },
 ];
 
-module.exports = { data };
+module.exports = { data: sampleListings };

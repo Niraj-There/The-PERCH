@@ -1,6 +1,101 @@
+<style>
+  .navbar-search-container {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
+  }
+
+  .navbar-search {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 40px;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .navbar-search:hover,
+  .navbar-search:focus-within {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .navbar-search-group {
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    border-right: 1px solid #e0e0e0;
+    flex: 1;
+  }
+
+  .navbar-search-group:last-of-type {
+    border-right: none;
+  }
+
+  .navbar-search-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0;
+    background: transparent;
+  }
+
+  .navbar-search-group input::placeholder {
+    color: #999;
+    font-size: 0.8rem;
+  }
+
+  .navbar-search-btn {
+    background: #fe424d;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 0.5rem;
+  }
+
+  .navbar-search-btn:hover {
+    background: #e63842;
+    transform: scale(1.05);
+  }
+
+  .navbar-search-btn i {
+    color: white;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-search-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 1rem 0;
+      order: 3;
+    }
+
+    .navbar-search {
+      border-radius: 25px;
+    }
+
+    .navbar-search-group {
+      padding: 0 0.5rem;
+    }
+
+    .navbar-search-group input {
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-plane"></i></a>
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-plane"></i></a>
     <button 
         class="navbar-toggler" 
         type="button" 
@@ -10,10 +105,35 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/listings">All listings</a>
-        <a class="nav-link" href="/listings/new">Add new listings</a>
-        
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+      <!-- Search Bar in Navbar -->
+      <div class="navbar-search-container">
+        <div class="navbar-search">
+          <div class="navbar-search-group">
+            <input type="text" id="navbar-search-location" placeholder="Where?" />
+          </div>
+          <div class="navbar-search-group">
+            <input type="text" id="navbar-search-country" placeholder="Country" />
+          </div>
+          <div class="navbar-search-group">
+            <input type="number" id="navbar-search-price" placeholder="Max ₹" />
+          </div>
+          <button class="navbar-search-btn" id="navbar-search-button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings/new">Add your PERCH</a>
+        <% if(!currentUser) { %>
+        <a class="nav-link" href="/signup"><b>Sign up</b></a>
+        <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% } else { %>
+        <a class="nav-link" href="/logout"><b>Log out</b></a>
+        <% } %>
       </div>
     </div>
   </div>

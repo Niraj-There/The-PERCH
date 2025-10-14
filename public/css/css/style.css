@@ -6,7 +6,6 @@ body {
     min-height: 100vh;
     background: #f5f7fa;
     color: #222;
-    margin: 0;
 }
 
 /* ============== Navbar (Header kept as before) ============== */
@@ -115,17 +114,21 @@ body {
     font-size: 2rem;
 }
 
+/* Main content area grows to push footer down */
+.main-content {
+    flex: 1 ;
+    
+}
 
 .footer {
-    background: #cdcdd0; /* whitesmoke-like */
+    background: #cdcdd0;
+    margin-top: auto;
+    width: 100%;
     flex-shrink: 0;
-    margin-top: auto ;
-   
 }
 
 .container{
-    flex: 1 0 auto;
-    padding-bottom: 2rem;
+    flex: 1;
 }
 
 .f-info-socials a {

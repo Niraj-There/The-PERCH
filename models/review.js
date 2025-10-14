@@ -12,11 +12,6 @@ const reviewSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    listing: {
-        type: Schema.Types.ObjectId,
-        ref: "Listing",
-        required: true
-    },
     author: {
         type: Schema.Types.ObjectId,
         ref:"User",

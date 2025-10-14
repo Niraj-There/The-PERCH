@@ -3,7 +3,7 @@
 <div class="row mt-3">
     <div class="col-8 offset-2">
         <h3>Edit Your Listing</h3>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" 
@@ -27,13 +27,25 @@
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Image URL</label>
-                <input type="url" 
+                <label for="image" class="form-label">Upload New Image</label>
+                <input type="file" 
                        id="image"
-                       name="listing[image][url]" 
-                       value="<%= listing.image.url %>" 
-                       class="form-control">
-                <div class="valid-feedback">Looks good!</div>
+                       name="listing[image]" 
+                       class="form-control"
+                       accept="image/*">
+                <small class="form-text text-muted">Current image will be replaced if you upload a new one</small>
+            </div>
+
+            <!-- Image Preview Section -->
+            <div class="mb-3">
+                <label class="form-label">Current Image Preview</label>
+                <div class="border rounded p-2 bg-light">
+                    <img src="<%= listing.image.url %>" 
+                         alt="<%= listing.title %>" 
+                         id="imagePreview"
+                         class="img-fluid rounded"
+                         style="max-height: 300px; width: 100%; object-fit: cover;">
+                </div>
             </div>
 
             <div class="row">
@@ -82,3 +94,29 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Image preview functionality
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        
+        if (file) {
+            // Check if file is an image
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select a valid image file');
+                imageInput.value = '';
+            }
+        }
+    });
+</script>

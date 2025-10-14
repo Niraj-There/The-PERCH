@@ -1,9 +1,106 @@
 <% layout("/layouts/boilerplate") %> 
 <body>
-    <h3>All Listings</h3>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+<style>
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .filter {
+        text-align: center;
+        margin-inline: 1rem;
+        margin-top: 1rem;
+        opacity: 0.7;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .filter:hover {
+        opacity: 1;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+    }
+
+    .tax-info {
+        display: inline;
+        color: #666;
+        font-size: 0.85rem;
+    }
+
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 3.25rem;
+        padding: 1rem;
+        margin-left: 3rem;
+        display: flex;
+        align-items: center;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div id="filters">
+     <div class="filter">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic cities</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Amazing pools</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-tractor"></i></div>
+        <p>Farms</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-regular fa-snowflake"></i></div>
+        <p>Arctic</p>
+    </div> 
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+        </div>
+    </div>
+</div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
         <% for(let listing of allListings) { %>
-            <div class="col">
+            <div class="col" data-location="<%= listing.location.toLowerCase() %>" data-country="<%= listing.country.toLowerCase() %>">
                 <div class="card h-100 listing-card">
                     <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 20rem;">
                     
@@ -12,7 +109,11 @@
                     <div class="card-body">
                         <h5 class="card-title"><b><%= listing.title %></b></h5>
                         <p class="card-text">
-                            &#8377;<%= listing.price.toLocaleString("en-IN") %>/Night
+                            &#8377;<span class="price-display" data-price="<%= listing.price %>"><%= listing.price.toLocaleString("en-IN") %></span>/Night
+                            <span class="tax-info">&nbsp;+18% GST</span>
+                        </p>
+                        <p class="card-text text-muted" style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %>
                         </p>
                         <a href="/listings/<%= listing._id %>" class="stretched-link"></a>
                     </div>
@@ -20,4 +121,128 @@
             </div>
         <% } %>
     </div>
+
+    <script>
+        // Tax toggle functionality
+        const taxSwitch = document.getElementById('flexSwitchCheckDefault');
+        const taxInfoElements = document.querySelectorAll('.tax-info');
+        const priceDisplays = document.querySelectorAll('.price-display');
+
+        taxSwitch.addEventListener('change', function() {
+            priceDisplays.forEach((priceDisplay) => {
+                const basePrice = parseFloat(priceDisplay.getAttribute('data-price'));
+                
+                if (taxSwitch.checked) {
+                    // Calculate price with 18% GST
+                    const priceWithTax = basePrice * 1.18;
+                    priceDisplay.textContent = priceWithTax.toLocaleString("en-IN", {
+                        maximumFractionDigits: 0
+                    });
+                } else {
+                    // Show original price
+                    priceDisplay.textContent = basePrice.toLocaleString("en-IN");
+                }
+            });
+
+            // Toggle tax info visibility
+            taxInfoElements.forEach((taxInfo) => {
+                if (taxSwitch.checked) {
+                    taxInfo.style.display = 'none';
+                } else {
+                    taxInfo.style.display = 'inline';
+                }
+            });
+        });
+
+        // Search functionality - using navbar search elements
+        const searchButton = document.getElementById('navbar-search-button');
+        const searchLocation = document.getElementById('navbar-search-location');
+        const searchCountry = document.getElementById('navbar-search-country');
+        const searchPrice = document.getElementById('navbar-search-price');
+        const listingCards = document.querySelectorAll('.col');
+
+        function performSearch() {
+            const locationQuery = searchLocation.value.toLowerCase().trim();
+            const countryQuery = searchCountry.value.toLowerCase().trim();
+            const maxPrice = searchPrice.value ? parseFloat(searchPrice.value) : Infinity;
+
+            let visibleCount = 0;
+
+            listingCards.forEach((card) => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const priceElement = card.querySelector('.price-display');
+                const price = parseFloat(priceElement.getAttribute('data-price'));
+                const location = card.getAttribute('data-location') || '';
+                const country = card.getAttribute('data-country') || '';
+
+                let matchesLocation = true;
+                let matchesCountry = true;
+                let matchesPrice = true;
+
+                if (locationQuery) {
+                    matchesLocation = title.includes(locationQuery) || location.includes(locationQuery);
+                }
+
+                if (countryQuery) {
+                    matchesCountry = country.includes(countryQuery);
+                }
+
+                if (maxPrice !== Infinity) {
+                    matchesPrice = price <= maxPrice;
+                }
+
+                if (matchesLocation && matchesCountry && matchesPrice) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.3s ease-in';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show message if no results
+            const existingMessage = document.getElementById('no-results-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            if (visibleCount === 0) {
+                const row = document.querySelector('.row.row-cols-1');
+                const message = document.createElement('div');
+                message.id = 'no-results-message';
+                message.className = 'col-12 text-center mt-5';
+                message.innerHTML = `
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; color: #ccc;"></i>
+                    <h4 class="mt-3">No listings found</h4>
+                    <p class="text-muted">Try adjusting your search filters</p>
+                `;
+                row.appendChild(message);
+            }
+        }
+
+        // Search on button click
+        searchButton.addEventListener('click', performSearch);
+
+        // Search on Enter key
+        [searchLocation, searchCountry, searchPrice].forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+
+        // Clear search when all inputs are empty
+        [searchLocation, searchCountry, searchPrice].forEach(input => {
+            input.addEventListener('input', () => {
+                if (!searchLocation.value && !searchCountry.value && !searchPrice.value) {
+                    listingCards.forEach(card => card.style.display = 'block');
+                    const existingMessage = document.getElementById('no-results-message');
+                    if (existingMessage) {
+                        existingMessage.remove();
+                    }
+                }
+            });
+        });
+    </script>
 </body>

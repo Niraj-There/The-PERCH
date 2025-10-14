@@ -7,31 +7,64 @@
             <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="<%= listing.title %>">
 
             <div class="card-body">
+                <p class="card-text">Owned by : <i><%= listing.owner.username %></i></p>
                 <p class="card-text"><%= listing.description %></p>
+    
                 <ul class="list-group list-group-flush mb-3">
-                    <li class="list-group-item">&#8377;<%= listing.price.toLocaleString("en-IN") %></li>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                &#8377;<span class="price-display" data-price="<%= listing.price %>"><%= listing.price.toLocaleString("en-IN") %></span>/Night
+                                <span class="tax-info text-muted" style="font-size: 0.9rem;">&nbsp;+18% GST</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="taxSwitch">
+                                <label class="form-check-label" for="taxSwitch" style="font-size: 0.85rem;">Inc. taxes</label>
+                            </div>
+                        </div>
+                    </li>
                     <li class="list-group-item"><%= listing.location %></li>
                     <li class="list-group-item"><%= listing.country %></li>
                 </ul>
+
+                <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
+          
                 <div class="mb-3">
                     <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark">Edit</a>
                     <form class="d-inline" method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 </div>
-                <hr/>
+                <% } %>
+                
+                <% if(currentUser) { %>
                 <h4 class="mb-3">Leave a Review</h4>
                 <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews" novalidate class="needs-validation">
                     <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <input type="range" min="1" max="5" step="1" id="rating" name="review[rating]" class="form-range">
+                        <label class="form-label">Rating</label>
+                        <fieldset class="starability-slot">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
                     </div>
                     <div class="mb-3">
                         <label for="comment" class="form-label">Comments</label>
                         <textarea id="comment" name="review[comment]" rows="5" class="form-control" required></textarea>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Please add some comments.</div>
                     </div>
-                    <button class="btn btn-outline-dark">Submit</button>
+                    <button class="btn btn-outline-dark">Submit Review</button>
                 </form>
+                <% } %>
 
                 <% if(listing.reviews.length > 0) { %>
                 <hr/>
@@ -41,16 +74,23 @@
                         <div class="col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Rating: 
-                                        <% for(let i = 0; i < review.rating; i++) { %>
-                                            ⭐
-                                        <% } %>
+                                    <h5 class="card-title mb-3">
+                                        <i class="fas fa-user-circle"></i> <%= review.author.username %>
                                     </h5>
-                                    <p class="card-text"><%= review.comment %></p>
-                                    <p class="card-text"><small class="text-muted">Reviewed on: <%= review.createdAt.toLocaleDateString() %></small></p>
+                                    <p class="starability-result" data-rating="<%= review.rating %>">
+                                        Rated: <%= review.rating %> stars
+                                    </p>
+                                    <p class="card-text mt-3"><%= review.comment %></p>
+                                    <p class="card-text"><small class="text-muted">
+                                        <i class="far fa-calendar-alt"></i> <%= review.createdAt.toLocaleDateString() %>
+                                    </small></p>
+                                    <% if(currentUser && review.author._id.equals(currentUser._id)) { %>
                                     <form class="d-inline" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                                        <button class="btn btn-sm btn-danger">Delete Review</button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
                                     </form>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -59,5 +99,68 @@
                 <% } %>
             </div>
         </div>
+        
+        <!-- Map Section -->
+        <% if(listing.geometry && listing.geometry.coordinates) { %>
+        <div class="col-12 mt-4 mb-3">
+            <h3>Where you'll be</h3>
+            <div id="map" class="map-container"></div>
+        </div>
+        <% } %>
     </div>
 </div>
+
+<% if(listing.geometry && listing.geometry.coordinates) { %>
+<script>
+    // Initialize Mapbox map
+    mapboxgl.accessToken = '<%= process.env.MAP_TOKEN %>';
+    
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: <%= JSON.stringify(listing.geometry.coordinates) %>,
+        zoom: 12
+    });
+
+    // Add navigation controls
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Create a popup
+    const popup = new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+            `<h5><%= listing.title %></h5><p><%= listing.location %></p>`
+        );
+
+    // Add marker
+    const marker = new mapboxgl.Marker({ color: '#fe424d' })
+        .setLngLat(<%= JSON.stringify(listing.geometry.coordinates) %>)
+        .setPopup(popup)
+        .addTo(map);
+</script>
+<% } %>
+
+<script>
+    // Tax toggle functionality for show page
+    const taxSwitch = document.getElementById('taxSwitch');
+    const priceDisplay = document.querySelector('.price-display');
+    const taxInfo = document.querySelector('.tax-info');
+
+    if (taxSwitch && priceDisplay) {
+        taxSwitch.addEventListener('change', function() {
+            const basePrice = parseFloat(priceDisplay.getAttribute('data-price'));
+            
+            if (taxSwitch.checked) {
+                // Calculate price with 18% GST
+                const priceWithTax = basePrice * 1.18;
+                priceDisplay.textContent = priceWithTax.toLocaleString("en-IN", {
+                    maximumFractionDigits: 0
+                });
+                if (taxInfo) taxInfo.style.display = 'none';
+            } else {
+                // Show original price
+                priceDisplay.textContent = basePrice.toLocaleString("en-IN");
+                if (taxInfo) taxInfo.style.display = 'inline';
+            }
+        });
+    }
+</script>
