@@ -4,7 +4,7 @@ const geocodingClient = require('../utils/geocoding.js');
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});
-    res.render("listings/index.ejs", { allListings });
+    res.render("listings/index.ejs", { allListings, showSearch: true });
 };
 
 module.exports.renderNewForm = (req, res) => {
