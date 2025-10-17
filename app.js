@@ -119,7 +119,7 @@ app.get('/', (req, res) => {
 
 // 404 handler
 app.all('*', (req, res, next) => {
-    next(new ExpressError(404, "Page Not Found!"));
+    next(new ExpressError("Page Not Found!", 404));
 });
 
 // Error handling middleware
@@ -129,6 +129,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
